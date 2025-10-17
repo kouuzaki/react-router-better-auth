@@ -8,6 +8,8 @@ import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
+import { AnimatedBeamNodes } from "~/components/ui/animated-beam-nodes";
+import { cn } from "~/lib/utils";
 
 import { signUpEmailSchema, type SignUpEmailInput } from "../schema/auth.schema";
 import { useSignUp, useSocialSignIn } from "../queries/auth-queries";
@@ -33,11 +35,11 @@ export function RegisterForm() {
   const onSubmit = async (data: SignUpEmailInput) => {
     try {
       await signUpMutation.mutateAsync(data);
-      
+
       toast.success("Account created!", {
         description: "Welcome! Your account has been created successfully.",
       });
-      
+
       navigate("/dashboard");
     } catch (error: any) {
       toast.error("Registration failed", {
@@ -167,7 +169,9 @@ export function RegisterForm() {
           </div>
         </div>
 
-        <div className="bg-muted hidden lg:block rounded-lg border" />
+        <div className="bg-muted hidden lg:block rounded-lg border relative overflow-hidden">
+          <AnimatedBeamNodes />
+        </div>
       </div>
     </div>
   );

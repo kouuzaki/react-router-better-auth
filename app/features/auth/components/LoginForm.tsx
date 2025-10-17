@@ -12,6 +12,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
 import { Checkbox } from "~/components/ui/checkbox";
+import { AnimatedBeamNodes } from "~/components/ui/animated-beam-nodes";
+import { cn } from "~/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
@@ -183,7 +185,9 @@ export function LoginForm() {
                     </div>
                 </div>
 
-                <div className="bg-muted hidden lg:block rounded-lg border" />
+                <div className="bg-muted hidden lg:block rounded-lg border relative overflow-hidden">
+                    <AnimatedBeamNodes />
+                </div>
             </div>
         </div>
     );

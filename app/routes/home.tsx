@@ -6,6 +6,7 @@ import { useSignIn, useSignUp, useSignOut } from "~/features/auth/queries/auth-q
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { AuthGuard } from "~/components/auth/auth-guard";
+import { StatusDemo } from "~/components/ui/status-demo";
 
 export function meta({ }: Route.MetaArgs) {
   return [
