@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { ThemeProvider } from "~/components/ui/custom/theme-provider";
 import { QueryProvider } from "~/lib/query-provider";
+import { AuthProvider } from "~/lib/auth-context";
 import { Toaster } from "~/components/ui/sonner";
 
 
@@ -38,18 +39,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryProvider>
-          <ThemeProvider
-            storageKey="theme"
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-            <ScrollRestoration />
-            <Scripts />
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider
+              storageKey="theme"
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+              <ScrollRestoration />
+              <Scripts />
+            </ThemeProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

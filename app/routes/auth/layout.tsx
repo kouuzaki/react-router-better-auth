@@ -1,10 +1,10 @@
-import React from 'react'
-import { Outlet } from 'react-router'
+import { Outlet } from "react-router";
+import { GuestGuard } from "~/components/auth/auth-guard";
 
-export default function Authlayout() {
+export default function AuthLayout() {
     return (
-        <div>
+        <GuestGuard redirectPath="/dashboard">
             <Outlet />
-        </div>
-    )
+        </GuestGuard>
+    );
 }
