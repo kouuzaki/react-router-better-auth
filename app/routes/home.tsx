@@ -23,6 +23,10 @@ export default function Home() {
 
   }
 
+  authClient.getSession().then((session) => {
+    console.log({ session });
+  });
+
   const onSignUp = () => {
     // Handle sign up logic here
     const data = authClient.signUp.email({

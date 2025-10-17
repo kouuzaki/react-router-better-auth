@@ -10,6 +10,8 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { ThemeProvider } from "~/components/ui/custom/theme-provider";
+import { QueryProvider } from "~/lib/query-provider";
+import { Toaster } from "~/components/ui/sonner";
 
 
 export const links: Route.LinksFunction = () => [
@@ -35,17 +37,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <ThemeProvider
-          storageKey="theme"
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            storageKey="theme"
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+            <ScrollRestoration />
+            <Scripts />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
