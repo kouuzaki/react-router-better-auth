@@ -2,12 +2,12 @@ import React, { forwardRef, useRef } from "react";
 import { cn } from "~/lib/utils";
 import { AnimatedBeam } from "~/components/ui/animation-beam";
 import {
-    Camera,
     Target,
     Radio,
     Clapperboard,
-    Brain,
-    CctvIcon
+    CctvIcon,
+    Server,
+    Cpu
 } from "lucide-react";
 import { RainbowButton } from "~/components/ui/rainbow-button";
 
@@ -15,13 +15,15 @@ import { RainbowButton } from "~/components/ui/rainbow-button";
  * AnimatedBeamCCTV Component
  * 
  * A beautiful visualization of CCTV AI distribution system with:
+ * - CCTV Cameras → Cloud Mini PC Gateway
+ * - Inside Mini PC: AI Processing & Studio Model Training
  * - Rainbow Button nodes with animated gradient borders
  * - Shadcn UI theme colors (no hardcoded colors)
  * - Gradient variants in AnimatedBeam connections
  * - Dark mode support with automatic color switching
  * 
  * Architecture:
- * Video Sources (Cameras) → AI Core Processor → AI Add-ons (Detection, Tracking, Studio Training)
+ * CCTV Sources → Mini PC Gateway → [AI Processing, Studio Training]
  * 
  * @example
  * ```tsx
@@ -60,7 +62,7 @@ const Circle = forwardRef<
                 {children}
             </RainbowButton>
             {label && (
-                <span className="text-xs font-medium text-center text-muted-foreground max-w-[80px]">
+                <span className="text-xs font-medium text-center text-muted-foreground max-w-[90px]">
                     {label}
                 </span>
             )}
@@ -87,13 +89,16 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
     const camera1Ref = useRef<HTMLButtonElement>(null);
     const camera2Ref = useRef<HTMLButtonElement>(null);
 
-    // Processing/AI Core (Center)
-    const aiCoreRef = useRef<HTMLButtonElement>(null);
+    // Cloud Mini PC Gateway (Center-Left)
+    const miniPcRef = useRef<HTMLButtonElement>(null);
 
-    // AI Features (Right side - Detection, Tracking, Studio)
+    // Inside Mini PC: Processing & Training (Center-Right & Right)
+    const aiProcessingRef = useRef<HTMLButtonElement>(null);
+    const studioTrainingRef = useRef<HTMLButtonElement>(null);
+
+    // Additional AI Features (Right side)
     const detectionRef = useRef<HTMLButtonElement>(null);
     const trackingRef = useRef<HTMLButtonElement>(null);
-    const studioRef = useRef<HTMLButtonElement>(null);
 
     const nodes: Record<string, NodeConfig> = {
         camera1: {
@@ -106,10 +111,20 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
             icon: <CctvIcon className="size-6  text-secondary" strokeWidth={1.5} />,
             label: "CCTV Camera 2",
         },
-        aiCore: {
-            ref: aiCoreRef,
-            icon: <Brain className="size-7  text-secondary" strokeWidth={1.5} />,
-            label: "AI Core Processor",
+        miniPc: {
+            ref: miniPcRef,
+            icon: <Server className="size-7  text-secondary" strokeWidth={1.5} />,
+            label: "Cloud Mini PC Gateway",
+        },
+        aiProcessing: {
+            ref: aiProcessingRef,
+            icon: <Cpu className="size-6  text-secondary" strokeWidth={1.5} />,
+            label: "AI Processing",
+        },
+        studioTraining: {
+            ref: studioTrainingRef,
+            icon: <Clapperboard className="size-6  text-secondary" strokeWidth={1.5} />,
+            label: "Studio Training",
         },
         detection: {
             ref: detectionRef,
@@ -120,11 +135,6 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
             ref: trackingRef,
             icon: <Radio className="size-6  text-secondary" strokeWidth={1.5} />,
             label: "Tracking Add-on",
-        },
-        studio: {
-            ref: studioRef,
-            icon: <Clapperboard className="size-6  text-secondary" strokeWidth={1.5} />,
-            label: "Studio Training",
         },
     };
 
@@ -140,13 +150,13 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
                         CCTV AI Distribution System
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                        Video streams → AI Processing → Multiple AI Add-ons
+                        Video Streams → Cloud Mini PC → AI Processing & Model Training
                     </p>
                 </div>
 
-                {/* Main Layout */}
-                <div className="flex justify-between items-center px-8 z-10">
-                    {/* Left: CCTV Cameras */}
+                {/* Main Layout - 4 Column Structure */}
+                <div className="flex justify-between items-center px-8 gap-6 z-10">
+                    {/* Column 1: CCTV Cameras */}
                     <div className="flex flex-col gap-8 items-center">
                         <div className="text-center mb-2">
                             <span className="text-xs font-semibold text-primary">VIDEO SOURCES</span>
@@ -165,23 +175,40 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
                         </Circle>
                     </div>
 
-                    {/* Center: AI Core */}
+                    {/* Column 2: Cloud Mini PC Gateway */}
                     <div className="flex flex-col items-center gap-4 z-10">
                         <div className="text-center mb-2">
-                            <span className="text-xs font-semibold text-primary">AI CORE</span>
+                            <span className="text-xs font-semibold text-primary">GATEWAY</span>
                         </div>
-                        <div className="relative">
-                            <Circle
-                                ref={nodes.aiCore.ref}
-                                label={showLabels ? nodes.aiCore.label : undefined}
-                                className="size-16"
-                            >
-                                {nodes.aiCore.icon}
-                            </Circle>
-                        </div>
+                        <Circle
+                            ref={nodes.miniPc.ref}
+                            label={showLabels ? nodes.miniPc.label : undefined}
+                            className="size-16"
+                        >
+                            {nodes.miniPc.icon}
+                        </Circle>
                     </div>
 
-                    {/* Right: AI Features */}
+                    {/* Column 3: Inside Mini PC - AI Processing & Training */}
+                    <div className="flex flex-col gap-8 items-center">
+                        <div className="text-center mb-2">
+                            <span className="text-xs font-semibold text-primary">MINI PC SERVICES</span>
+                        </div>
+                        <Circle
+                            ref={nodes.aiProcessing.ref}
+                            label={showLabels ? nodes.aiProcessing.label : undefined}
+                        >
+                            {nodes.aiProcessing.icon}
+                        </Circle>
+                        <Circle
+                            ref={nodes.studioTraining.ref}
+                            label={showLabels ? nodes.studioTraining.label : undefined}
+                        >
+                            {nodes.studioTraining.icon}
+                        </Circle>
+                    </div>
+
+                    {/* Column 4: Additional Features */}
                     <div className="flex flex-col gap-8 items-center z-10">
                         <div className="text-center mb-2">
                             <span className="text-xs font-semibold text-primary">AI ADD-ONS</span>
@@ -198,22 +225,18 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
                         >
                             {nodes.tracking.icon}
                         </Circle>
-                        <Circle
-                            ref={nodes.studio.ref}
-                            label={showLabels ? nodes.studio.label : undefined}
-                        >
-                            {nodes.studio.icon}
-                        </Circle>
                     </div>
                 </div>
             </div>
 
-            {/* Animated Beams - Cameras to AI Core with gradient variants */}
+            {/* ========== ANIMATED BEAMS ========== */}
+
+            {/* Beams: CCTV Cameras → Mini PC Gateway */}
             <AnimatedBeam
                 duration={animationSpeed}
                 containerRef={containerRef}
                 fromRef={nodes.camera1.ref}
-                toRef={nodes.aiCore.ref}
+                toRef={nodes.miniPc.ref}
                 gradientStartColor="var(--color-1)"
                 gradientStopColor="var(--color-2)"
             />
@@ -222,18 +245,18 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
                 delay={0.3}
                 containerRef={containerRef}
                 fromRef={nodes.camera2.ref}
-                toRef={nodes.aiCore.ref}
+                toRef={nodes.miniPc.ref}
                 gradientStartColor="var(--color-2)"
                 gradientStopColor="var(--color-3)"
             />
 
-            {/* Animated Beams - AI Core to Add-ons with gradient variants */}
+            {/* Beams: Mini PC Gateway → AI Processing & Training (Inside Mini PC) */}
             <AnimatedBeam
                 duration={animationSpeed}
                 delay={0.6}
                 containerRef={containerRef}
-                fromRef={nodes.aiCore.ref}
-                toRef={nodes.detection.ref}
+                fromRef={nodes.miniPc.ref}
+                toRef={nodes.aiProcessing.ref}
                 gradientStartColor="var(--color-3)"
                 gradientStopColor="var(--color-4)"
             />
@@ -241,19 +264,30 @@ export function AnimatedBeamCCTV({ showLabels = true, animationSpeed = 2 }: Anim
                 duration={animationSpeed}
                 delay={0.9}
                 containerRef={containerRef}
-                fromRef={nodes.aiCore.ref}
-                toRef={nodes.tracking.ref}
+                fromRef={nodes.miniPc.ref}
+                toRef={nodes.studioTraining.ref}
                 gradientStartColor="var(--color-4)"
                 gradientStopColor="var(--color-5)"
             />
+
+            {/* Beams: AI Processing & Training → Add-on Features */}
             <AnimatedBeam
                 duration={animationSpeed}
                 delay={1.2}
                 containerRef={containerRef}
-                fromRef={nodes.aiCore.ref}
-                toRef={nodes.studio.ref}
+                fromRef={nodes.aiProcessing.ref}
+                toRef={nodes.detection.ref}
                 gradientStartColor="var(--color-5)"
                 gradientStopColor="var(--color-1)"
+            />
+            <AnimatedBeam
+                duration={animationSpeed}
+                delay={1.5}
+                containerRef={containerRef}
+                fromRef={nodes.studioTraining.ref}
+                toRef={nodes.tracking.ref}
+                gradientStartColor="var(--color-1)"
+                gradientStopColor="var(--color-2)"
             />
         </div>
     );
